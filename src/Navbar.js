@@ -6,8 +6,8 @@ export const Navbar = ({title}) => {
         <View style={styles.navbar}>
             <Text style={styles.text}>{title}</Text>
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     navbar: {

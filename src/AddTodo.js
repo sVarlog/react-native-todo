@@ -14,7 +14,7 @@ export const AddTodo = ({onSubmit}) => {
                 'Todo title cannot be empty!'
             );
         }
-    }
+    };
 
     return (
         <View style={styles.block}>
@@ -24,12 +24,11 @@ export const AddTodo = ({onSubmit}) => {
                 value={value} 
                 placeholder="Enter todo name" 
                 autoCorrect={false}
-                keyboardType="number-pad"
             />
             <Button style={styles.button} title="Add todo" onPress={pressHandler} />
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     block: {
