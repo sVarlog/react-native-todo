@@ -1,6 +1,7 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Alert} from 'react-native';
+import {ScreenContext} from './components/context/screen/screenContext';
 
 import {TodoContext} from './components/context/todo/todoContext';
 import {Navbar} from './components/Navbar';
@@ -9,16 +10,8 @@ import {TodoScreen} from './screens/TodoScreen';
 
 export const MainLayout = () => {
     const {todos, addTodo, removeTodo, updateTodo} = useContext(TodoContext);
-    const [todoId, setTodoId] = useState(null);
-
-	const openTodoId = (id) => {
-		setTodoId(id);
-	};
-
-	const closeTodoId = () => {
-		setTodoId(null);
-	};
-
+    const {todoId, changeScreen} = useContext(ScreenContext);
+    
     const confirmRemoveTodo = (todo) => {
 		Alert.alert(
             'Delete todo',
@@ -32,7 +25,7 @@ export const MainLayout = () => {
                     text: 'Remove',
 					style: 'destructive',
                     onPress: () => {
-						closeTodoId();
+						changeScreen(null);
                         removeTodo(todo.id);
 					}
                 }
@@ -48,7 +41,7 @@ export const MainLayout = () => {
 		content = <TodoScreen 
 			todo={selectedTodo} 
 			removeTodo={confirmRemoveTodo} 
-			goBack={closeTodoId}
+			goBack={() => changeScreen(null)}
 			onSave={updateTodo}
 		/>
 	} else {
@@ -56,7 +49,7 @@ export const MainLayout = () => {
 			todos={todos} 
 			addTodo={addTodo} 
 			removeTodo={confirmRemoveTodo} 
-			openTodo={openTodoId} 
+			openTodo={changeScreen} 
 		/>
 	}
 
