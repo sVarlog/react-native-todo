@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
-import {StyleSheet, ScrollView, View, FlatList} from 'react-native';
-import {Navbar} from './src/Navbar';
-import {AddTodo} from './src/AddTodo';
-import {Todo} from './src/Todo';
+import {StyleSheet, View, Alert} from 'react-native';
+import {Navbar} from './src/components/Navbar';
+import {MainScreen} from './src/screens/MainScreen';
+import {TodoScreen} from './src/screens/TodoScreen';
 
 export default function App() {
-	const [todos, setTodos] = useState([]);
+	const [todoId, setTodoId] = useState(null);
+	const [todos, setTodos] = useState([
+		// {id: '1', title: 'Learn React Native'},
+	]);
 
 	const addTodo = (title) => {
 		const newTodo = {id: Date.now().toString() + title, title};
@@ -13,25 +16,67 @@ export default function App() {
 		setTodos((prev) => [newTodo].concat(prev));
 	};
 
-	const removeTodo = (id) => {
-		setTodos(prev => prev.filter(el => el.id !== id));
+	const removeTodo = (todo) => {
+		Alert.alert(
+            'Delete todo',
+            `Are you sure to delete "${todo.title}"?`,
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel'
+                },
+                {
+                    text: 'Remove',
+					style: 'destructive',
+                    onPress: () => {
+						closeTodoId();
+						setTodos(prev => prev.filter(el => el.id !== todo.id));
+					}
+                }
+            ],
+			{cancelable: true}
+        )
 	};
+
+	const openTodoId = (id) => {
+		setTodoId(id);
+	};
+
+	const closeTodoId = () => {
+		setTodoId(null);
+	};
+
+	const updateTodo = (id, title) => {
+		setTodos(old => old.map(el => {
+			if (el.id === id) el.title = title;
+			return el;
+		}));
+	};
+
+	let content;
+
+	if (todoId) {
+		const selectedTodo = todos.find(el => el.id === todoId);
+		content = <TodoScreen 
+			todo={selectedTodo} 
+			removeTodo={removeTodo} 
+			goBack={closeTodoId}
+			onSave={updateTodo}
+		/>
+	} else {
+		content = <MainScreen 
+			todos={todos} 
+			addTodo={addTodo} 
+			removeTodo={removeTodo} 
+			openTodo={openTodoId} 
+		/>
+	}
 
 	return (
 		<View style={styles.wrapper}>
 			<Navbar title="Todo app"/>
 			<View style={styles.container}>
-				<AddTodo 
-					style={styles.add} 
-					onSubmit={addTodo} 
-				/>
-
-				<FlatList 
-					data={todos}
-					keyExtractor={item => item.id.toString()}
-					renderItem={({item}) => <Todo todo={item} onRemove={removeTodo} />}
-				/>
-
+				{content}
 			</View>
 		</View>
 	);
