@@ -1,4 +1,4 @@
-import { ADD_TODO, REMOVE_TODO, UPDATE_TODO } from "../types";
+import {ADD_TODO, REMOVE_TODO, UPDATE_TODO} from "../types";
 
 const handlers = {
     [ADD_TODO]: (state, {title}) => ({
@@ -23,6 +23,7 @@ const handlers = {
 };
 
 export const todoReducer = (state, action) => {
-    const handler = handlers[action.type] || handlers[DEFAULT];
-    return handler(state, action);
+    const handler = handlers[action.type] || handlers.DEFAULT;
+    const result = handler(state, action);
+    return result;
 };

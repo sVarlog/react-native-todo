@@ -1,17 +1,22 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, View, FlatList, Image} from 'react-native';
 import {AddTodo} from '../components/AddTodo';
+import {ScreenContext} from '../components/context/screen/screenContext';
+import {TodoContext} from '../components/context/todo/todoContext';
 import {Todo} from '../components/Todo';
 
 
-export const MainScreen = ({addTodo, todos, removeTodo, openTodo}) => {
+export const MainScreen = () => {
+    const {addTodo, todos, removeTodo, openTodo} = useContext(TodoContext);
+    const {changeScreen} = useContext(ScreenContext);
+    
     let content;
 
     if (todos.length > 0) {
         content = <FlatList 
             data={todos}
             keyExtractor={item => item.id.toString()}
-            renderItem={({item}) => <Todo todo={item} onRemove={removeTodo} onOpen={openTodo}/>}
+            renderItem={({item}) => <Todo todo={item} onRemove={removeTodo} onOpen={changeScreen}/>}
         />
     } else {
         content = <View style={styles.imgWrap}>

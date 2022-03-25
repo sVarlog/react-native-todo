@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, TextInput, Alert, StyleSheet, Keyboard} from 'react-native';
 import {AntDesign} from '@expo/vector-icons'; 
 import {THEME} from '../theme';
-import { AppButton } from './ui/AppButton';
+import {AppButton} from './ui/AppButton';
 
 export const AddTodo = ({onSubmit}) => {
     const [value, setValue] = useState('');

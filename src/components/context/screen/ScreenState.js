@@ -1,5 +1,5 @@
 import React, {useReducer} from 'react';
-import { CHANGE_SCREEN } from '../types';
+import {CHANGE_SCREEN} from '../types';
 import {ScreenContext} from './screenContext';
 import {screenReducer} from './screenReducer';
 

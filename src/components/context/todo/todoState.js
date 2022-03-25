@@ -1,9 +1,13 @@
-import React, {useReducer} from 'react';
-import { ADD_TODO, REMOVE_TODO, UPDATE_TODO } from '../types';
+import React, {useReducer, useContext} from 'react';
+import {Alert} from 'react-native';
+import {ScreenContext} from '../screen/screenContext';
+import {ADD_TODO, REMOVE_TODO, UPDATE_TODO} from '../types';
 import {TodoContext} from './todoContext';
 import {todoReducer} from './todoReducer';
 
 export const TodoState = ({children}) => {
+    const {changeScreen} = useContext(ScreenContext);
+
     const initialState = {
         todos: [{id: '1', title: 'Learn React Native'},]
     };
@@ -13,7 +17,27 @@ export const TodoState = ({children}) => {
         dispatch({type: ADD_TODO, title: title})
     };
 
-    const removeTodo = (id) => dispatch({type: REMOVE_TODO, id});
+    const removeTodo = (todo) => {
+		Alert.alert(
+            'Delete todo',
+            `Are you sure to delete "${todo.title}"?`,
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel'
+                },
+                {
+                    text: 'Remove',
+					style: 'destructive',
+                    onPress: () => {
+                        changeScreen(null);
+                        dispatch({type: REMOVE_TODO, id: todo.id})
+					}
+                }
+            ],
+			{cancelable: true}
+        )
+    };
 
     const updateTodo = (id, title) => dispatch({type: UPDATE_TODO, id, title});
 
